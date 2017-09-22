@@ -5,9 +5,21 @@ var path = require('path');
 var state = require('./state');
 var canvas = require('canvas');
 
+// returns a promise which will contain a png
 function drawDirect (fileName) {
   return new Promise(function (resolve, reject) {
     resolve(fs.createReadStream(path.join(__dirname, 'images', fileName)));
+  });
+}
+
+// returns a promise which will contain a png
+function drawSoftwareMojangState () {
+  return state.getMojangAuthStatus().then(function (status) {
+    try {
+      return fs.createReadStream(__dirname + '/images/software-mojang-' + status.authserver + '.png');
+    } catch (e) {
+      return fs.createReadStream(__dirname + '/images/software-mojang.png');
+    }
   });
 }
 
@@ -75,6 +87,7 @@ module.exports = {
   drawDirect: drawDirect,
   drawSoftwareHeader: drawSoftwareHeader,
   drawDevelopmentHeader: drawDevelopmentHeader,
+  drawSoftwareMojangState: drawSoftwareMojangState,
   increaseSoftwareViews: state.increaseSoftwareViews,
   increaseDevelopmentViews: state.increaseDevelopmentViews
 }

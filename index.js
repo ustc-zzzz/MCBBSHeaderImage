@@ -31,7 +31,7 @@ var softwareFileMap = {
   'download.png': image.drawDirect.bind(image, 'software-download.png'),
   'rule.png': image.drawDirect.bind(image, 'software-rule.png'),
   'recommendation.png': image.drawDirect.bind(image, 'recommendation-list.png'),
-  'mojang.png': image.drawDirect.bind(image, 'software-mojang.png'),
+  'mojang.png': image.drawSoftwareMojangState.bind(image),
   'header.png': function (isRealVisit) {
     if (isRealVisit) {
       return image.increaseSoftwareViews().then(image.drawSoftwareHeader);
