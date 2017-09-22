@@ -1,0 +1,8 @@
+/*
+
+!.gitignore
+
+!*.js
+!images/
+
+!package.json
