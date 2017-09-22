@@ -46,7 +46,7 @@ router.get('/development/:name', function (req, res, next) {
   if (name && developmentFileMap[name]) {
     res.setHeader('Content-Type', 'image/png');
     var isValidUA = uaFilter.test(req.get('User-Agent'));
-    var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
+    var isValidReferer = developmentRefererFilter.test(req.get('Referer'));
     developmentFileMap[name](isValidUA && isValidReferer).then(function (stream) {
       stream.pipe(res);
     }).catch(next);
@@ -60,7 +60,7 @@ router.get('/software/:name', function (req, res, next) {
   if (name && softwareFileMap[name]) {
     res.setHeader('Content-Type', 'image/png');
     var isValidUA = uaFilter.test(req.get('User-Agent'));
-    var isValidReferer = developmentRefererFilter.test(req.get('Referer'));
+    var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
     softwareFileMap[name](isValidUA && isValidReferer).then(function (stream) {
       stream.pipe(res);
     }).catch(next);

@@ -39,10 +39,10 @@ function drawSoftwareHeader () {
     return state.getMinecraftVersions().then(function (data) {
       return state.getSoftwareViews().then(function (text) {
         text = '' + text;
-        ctx.font = '20px Microsoft Yahei';
+        ctx.font = '20px DejaVu Sans';
         ctx.fillStyle = '#fbf2db';
         ctx.fillText(text, 178 - 6 * text.length, 28); // magic numbers
-        ctx.font = '17px Microsoft Yahei';
+        ctx.font = '16px DejaVu Sans';
         ctx.fillText('Minecraft ' + data.stable, 522, 27); // magic numbers
         ctx.fillText('Minecraft ' + data.snapshot, 714, 27); // magic numbers
         return ctx;
@@ -69,10 +69,10 @@ function drawDevelopmentHeader () {
     return state.getSaleStats().then(function (data) {
       return state.getDevelopmentViews().then(function (text) {
         text = '' + text;
-        ctx.font = '20px Microsoft Yahei';
+        ctx.font = '20px DejaVu Sans';
         ctx.fillStyle = '#fbf2db';
         ctx.fillText(text, 178 - 6 * text.length, 28); // magic numbers
-        ctx.font = '17px Microsoft Yahei';
+        ctx.font = '16px DejaVu Sans';
         ctx.fillText(data.total.toLocaleString('en'), 548, 27); // magic numbers
         ctx.fillText(data.last24h.toLocaleString('en'), 826, 27); // magic numbers
         return ctx;
