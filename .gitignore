@@ -4,5 +4,6 @@
 
 !*.js
 !images/
+!deploy.sh
 
 !package.json
