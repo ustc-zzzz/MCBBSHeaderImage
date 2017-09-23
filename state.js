@@ -8,7 +8,7 @@ var timeInterval = 60000;
 
 var viewsDatabase, waitUntilOpen = new Promise(function (resolve, reject) {
   var mode = sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE;
-  viewsDatabase = new sqlite3.Database('views.db', mode, function (err) {
+  viewsDatabase = new sqlite3.Database(__dirname + '/views.db', mode, function (err) {
     if (err) reject(err); else resolve();
   });
 }).then(function () {
