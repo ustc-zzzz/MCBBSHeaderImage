@@ -24,7 +24,7 @@ var developmentFileMap = {
       return image.drawDevelopmentHeader();
     }
   }
-}
+};
 
 var softwareFileMap = {
   'post.png': image.drawDirect.bind(image, 'software-post.png'),
@@ -39,6 +39,26 @@ var softwareFileMap = {
       return image.drawSoftwareHeader();
     }
   }
+};
+
+var ipRecords = {}, maxVisitsInPeriod = 60, period = 600000; // milliseconds
+
+function isThisIPVisitsTooFrequently (ip) {
+  var visitRecords = ipRecords[ip];
+  var now = Date.now();
+  if (!visitRecords) {
+    ipRecords[ip] = [now];
+    return false;
+  } else if (visitRecords.length < maxVisitsInPeriod) {
+    visitRecords.push(now);
+    return false;
+  } else if (visitRecords[0] + period <= now) {
+    visitRecords.shift();
+    visitRecords.push(now);
+    return false;
+  } else {
+    return true;
+  }
 }
 
 router.get('/development/:name', function (req, res, next) {
@@ -47,7 +67,8 @@ router.get('/development/:name', function (req, res, next) {
     res.setHeader('Content-Type', 'image/png');
     var isValidUA = uaFilter.test(req.get('User-Agent'));
     var isValidReferer = developmentRefererFilter.test(req.get('Referer'));
-    developmentFileMap[name](isValidUA && isValidReferer).then(function (stream) {
+    var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
+    developmentFileMap[name](isValidUA && isValidReferer && isThisIPNotRestricted).then(function (stream) {
       stream.pipe(res);
     }).catch(next);
   } else {
@@ -61,7 +82,8 @@ router.get('/software/:name', function (req, res, next) {
     res.setHeader('Content-Type', 'image/png');
     var isValidUA = uaFilter.test(req.get('User-Agent'));
     var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
-    softwareFileMap[name](isValidUA && isValidReferer).then(function (stream) {
+    var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
+    softwareFileMap[name](isValidUA && isValidReferer && isThisIPNotRestricted).then(function (stream) {
       stream.pipe(res);
     }).catch(next);
   } else {
@@ -69,7 +91,7 @@ router.get('/software/:name', function (req, res, next) {
   }
 });
 
-app.use(logger('short'));
+app.use(logger('common'));
 app.use('/image', router);
 app.use(function (req, res, next) {
   res.status(500).end();
