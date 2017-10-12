@@ -15,9 +15,9 @@ function drawDirect (fileName) {
 // returns a promise which will contain a png
 function drawSoftwareMojangState () {
   return state.getMojangAuthStatus().then(function (status) {
-    try {
+    if (status.authserver) {
       return fs.createReadStream(__dirname + '/images/software-mojang-' + status.authserver + '.png');
-    } catch (e) {
+    } else {
       return fs.createReadStream(__dirname + '/images/software-mojang.png');
     }
   });
@@ -43,8 +43,8 @@ function drawSoftwareHeader () {
         ctx.fillStyle = '#fbf2db';
         ctx.fillText(text, 177 - 5 * text.length, 27); // magic numbers
         ctx.font = '16px DejaVu Sans';
-        ctx.fillText('Minecraft ' + data.stable, 522, 27); // magic numbers
-        ctx.fillText('Minecraft ' + data.snapshot, 714, 27); // magic numbers
+        ctx.fillText(data.stable ? 'Minecraft ' + data.stable : 'Unknown', 522, 27); // magic numbers
+        ctx.fillText(data.snapshot ? 'Minecraft ' + data.snapshot : 'Unknown', 714, 27); // magic numbers
         return ctx;
       });
     });
@@ -73,8 +73,8 @@ function drawDevelopmentHeader () {
         ctx.fillStyle = '#fbf2db';
         ctx.fillText(text, 177 - 5 * text.length, 27); // magic numbers
         ctx.font = '16px DejaVu Sans';
-        ctx.fillText(data.total.toLocaleString('en'), 542, 27); // magic numbers
-        ctx.fillText(data.last24h.toLocaleString('en'), 820, 27); // magic numbers
+        ctx.fillText(data.total ? data.total.toLocaleString('en') : 'Unknown', 542, 27); // magic numbers
+        ctx.fillText(data.last24h ? data.last24h.toLocaleString('en') : 'Unknown', 820, 27); // magic numbers
         return ctx;
       });
     });

@@ -29,7 +29,7 @@ function getApproximateTimeStamp () {
 }
 
 function updateStats () {
-  function updateUntilItIsOK () {
+  function updateUntilItIsOK (times) {
     return Promise.all([rp({
       method: 'POST',
       uri: 'https://api.mojang.com/orders/statistics',
@@ -62,11 +62,15 @@ function updateStats () {
       lastUpdateTime = Date.now();
       return null;
     }).catch(function (err) {
-      return updateUntilItIsOK();
+      if (times > 0) {
+        return updateUntilItIsOK(times - 1);
+      }
+      lastUpdateTime = Date.now();
+      return Promise.resolve(null);
     });
   }
   if (Math.floor(lastUpdateTime / timeInterval) < Math.floor(Date.now() / timeInterval)) {
-    var promise = updateUntilItIsOK();
+    var promise = updateUntilItIsOK(3);
     if (lastUpdateTime === 0) {
       return promise;
     } else {
