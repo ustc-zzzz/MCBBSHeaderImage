@@ -73,8 +73,8 @@ function drawDevelopmentHeader () {
         ctx.fillStyle = '#fbf2db';
         ctx.fillText(text, 177 - 5 * text.length, 27); // magic numbers
         ctx.font = '16px DejaVu Sans';
-        ctx.fillText(data.total ? data.total.toLocaleString('en') : 'Unknown', 542, 27); // magic numbers
-        ctx.fillText(data.last24h ? data.last24h.toLocaleString('en') : 'Unknown', 820, 27); // magic numbers
+        ctx.fillText(data.total ? data.total.toLocaleString('en') : '-', 542, 27); // magic numbers
+        ctx.fillText(data.last24h ? data.last24h.toLocaleString('en') : '-', 820, 27); // magic numbers
         return ctx;
       });
     });
