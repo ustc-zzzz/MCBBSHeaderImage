@@ -47,8 +47,8 @@ function updateStats () {
       versions.stable = versions.snapshot = undefined;
       for (var i in minecraftVersions) {
         var type = minecraftVersions[i].type;
-        if (type === 'release') versions.stable = minecraftVersions[i].id;
-        if (type === 'snapshot') versions.snapshot = minecraftVersions[i].id;
+        if (type === 'release' && !versions.stable) versions.stable = minecraftVersions[i].id;
+        if (type === 'snapshot' && !versions.snapshot) versions.snapshot = minecraftVersions[i].id;
         if (versions.stable && versions.snapshot) break;
       }
       var statusCollection = data[2];
