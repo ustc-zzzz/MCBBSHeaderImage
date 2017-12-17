@@ -1,7 +1,9 @@
 'use strict'
 
 var fs = require('fs');
+var path = require('path');
 var logger = require('morgan');
+var crypto = require('crypto');
 var image = require('./image');
 var express = require('express');
 
@@ -86,6 +88,16 @@ router.get('/software/:name', function (req, res, next) {
     softwareFileMap[name](isValidUA && isValidReferer && isThisIPNotRestricted).then(function (stream) {
       stream.pipe(res);
     }).catch(next);
+  } else {
+    next();
+  }
+});
+
+router.get('/log/:token', function (req, res, next) {
+  var hash = crypto.createHash('sha256').update('log/').update('' + req.params['token']).digest('hex');
+  if (hash === '9473e7baa5c8d0aba1be684531e2b87a41dc0c01597fb3e359f54e2ac07fd437') {
+    var file = fs.createReadStream(path.join(process.env.HOME, '.forever/mcbbs-header-image.log'));
+    file.pipe(res);
   } else {
     next();
   }
