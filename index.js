@@ -94,7 +94,7 @@ router.get('/software/:name', function (req, res, next) {
 app.use(logger('common'));
 app.use('/image', router);
 app.use(function (req, res, next) {
-  res.status(500).end();
+  res.status(404).end();
 });
 
 app.listen(3003);
