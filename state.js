@@ -21,6 +21,11 @@ var viewsDatabase, waitUntilOpen = new Promise(function (resolve, reject) {
     var sql = 'CREATE TABLE IF NOT EXISTS development (date INTEGER(32) PRIMARY KEY, count INTEGER(32) DEFAULT 0);';
     viewsDatabase.run(sql, [], resolve);
   });
+}).then(function () {
+  return new Promise(function (resolve, reject) {
+    var sql = 'CREATE TABLE IF NOT EXISTS qnada (date INTEGER(32) PRIMARY KEY, count INTEGER(32) DEFAULT 0);';
+    viewsDatabase.run(sql, [], resolve);
+  });
 });
 
 function getApproximateTimeStamp () {
@@ -106,12 +111,20 @@ function getDevelopmentViews () {
   return getViews('development');
 }
 
+function getQandaViews () {
+  return getViews('qanda');
+}
+
 function increaseSoftwareViews () {
   return increaseViews('software');
 }
 
 function increaseDevelopmentViews () {
   return increaseViews('development');
+}
+
+function increaseQandaViews () {
+  return increaseViews('qanda');
 }
 
 function increaseViews (tableName) {
@@ -142,8 +155,10 @@ module.exports = {
     getSaleStats: getSaleStats,
     getSoftwareViews: getSoftwareViews,
     getDevelopmentViews: getDevelopmentViews,
+    getQandaViews: getQandaViews,
     getMojangAuthStatus: getMojangAuthStatus,
     getMinecraftVersions: getMinecraftVersions,
     increaseSoftwareViews: increaseSoftwareViews,
-    increaseDevelopmentViews: increaseDevelopmentViews
+    increaseDevelopmentViews: increaseDevelopmentViews,
+    increaseQandaViews: increaseQandaViews
 };

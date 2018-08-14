@@ -43,6 +43,16 @@ var softwareFileMap = {
   }
 };
 
+var qandaFileMap = {
+  'header.png': function (isRealVisit) {
+    if (isRealVisit()) {
+      return image.increaseQandaViews().then(image.drawQandaHeader);
+    } else {
+      return image.drawQandaHeader();
+    }
+  }
+};
+
 var ipRecords = {}, maxVisitsInPeriod = 6, period = 3600000; // milliseconds
 
 function isThisIPVisitsTooFrequently (ip) {
@@ -85,6 +95,23 @@ router.get('/software/:name', function (req, res, next) {
   if (name && softwareFileMap[name]) {
     res.setHeader('Content-Type', 'image/png');
     softwareFileMap[name](function () {
+      var isValidUA = uaFilter.test(req.get('User-Agent'));
+      var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
+      var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
+      return isValidUA && isValidReferer && isThisIPNotRestricted;
+    }).then(function (stream) {
+      stream.pipe(res);
+    }).catch(next);
+  } else {
+    next();
+  }
+});
+
+router.get('/qanda/:name', function (req, res, next) {
+  var name = req.params['name'];
+  if (name && softwareFileMap[name]) {
+    res.setHeader('Content-Type', 'image/png');
+    qandaFileMap[name](function () {
       var isValidUA = uaFilter.test(req.get('User-Agent'));
       var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
       var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');

@@ -83,11 +83,40 @@ function drawDevelopmentHeader () {
   });
 }
 
+function drawQandaHeader () {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(__dirname + '/images/qanda-header.png', function (err, data) {
+      if (err) reject(err); else resolve(data);
+    });
+  }).then(function (data) {
+    var img = new canvas.Image();
+    img.src = data;
+    var ctx = new canvas(img.width, img.height).getContext('2d');
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    return ctx;
+  }).then(function (ctx) {
+    return state.getSaleStats().then(function (data) {
+      return state.getDevelopmentViews().then(function (text) {
+        text = '' + text;
+        ctx.font = '30px DejaVu Sans';
+        ctx.fillStyle = '#000000';
+        ctx.fillText(text, 95 - 10 * text.length, 70); // magic numbers
+        return ctx;
+      });
+    });
+  }).then(function (ctx) {
+    return ctx.canvas.pngStream();
+  });
+}
+
+
 module.exports = {
   drawDirect: drawDirect,
   drawSoftwareHeader: drawSoftwareHeader,
+  drawQandaHeader: drawQandaHeader,
   drawDevelopmentHeader: drawDevelopmentHeader,
   drawSoftwareMojangState: drawSoftwareMojangState,
   increaseSoftwareViews: state.increaseSoftwareViews,
-  increaseDevelopmentViews: state.increaseDevelopmentViews
+  increaseDevelopmentViews: state.increaseDevelopmentViews,
+  increaseQandaViews: state.increaseQandaViews
 }
