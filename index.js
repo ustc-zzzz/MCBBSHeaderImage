@@ -12,6 +12,7 @@ var app = express(), router = express.Router();
 var uaFilter = /^Mozilla\/\S*\ /
 var softwareRefererFilter = /^https?:\/\/(www\.mcbbs\.net|mcbbs\.net|mcbbs\.tvt\.im)\/forum\-software/;
 var developmentRefererFilter = /^https?:\/\/(www\.mcbbs\.net|mcbbs\.net|mcbbs\.tvt\.im)\/forum\-development/;
+var qandaRefererFilter = /^https?:\/\/(www\.mcbbs\.net|mcbbs\.net|mcbbs\.tvt\.im)\/forum\-(qanda|multiqanda|modqanda|1566)/;
 
 var developmentFileMap = {
   'post.png': image.drawDirect.bind(image, 'development-post.png'),
@@ -109,11 +110,11 @@ router.get('/software/:name', function (req, res, next) {
 
 router.get('/qanda/:name', function (req, res, next) {
   var name = req.params['name'];
-  if (name && softwareFileMap[name]) {
+  if (name && qandaFileMap[name]) {
     res.setHeader('Content-Type', 'image/png');
     qandaFileMap[name](function () {
       var isValidUA = uaFilter.test(req.get('User-Agent'));
-      var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
+      var isValidReferer = qandaRefererFilter.test(req.get('Referer'));
       var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
       return isValidUA && isValidReferer && isThisIPNotRestricted;
     }).then(function (stream) {
