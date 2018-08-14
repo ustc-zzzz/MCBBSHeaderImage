@@ -23,7 +23,7 @@ var viewsDatabase, waitUntilOpen = new Promise(function (resolve, reject) {
   });
 }).then(function () {
   return new Promise(function (resolve, reject) {
-    var sql = 'CREATE TABLE IF NOT EXISTS qnada (date INTEGER(32) PRIMARY KEY, count INTEGER(32) DEFAULT 0);';
+    var sql = 'CREATE TABLE IF NOT EXISTS qanda (date INTEGER(32) PRIMARY KEY, count INTEGER(32) DEFAULT 0);';
     viewsDatabase.run(sql, [], resolve);
   });
 });
