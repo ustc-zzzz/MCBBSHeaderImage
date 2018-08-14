@@ -95,15 +95,13 @@ function drawQandaHeader () {
     ctx.drawImage(img, 0, 0, img.width, img.height);
     return ctx;
   }).then(function (ctx) {
-    return state.getSaleStats().then(function (data) {
-      return state.getDevelopmentViews().then(function (text) {
+      return state.getQandaViews().then(function (text) {
         text = '' + text;
         ctx.font = '30px DejaVu Sans';
         ctx.fillStyle = '#000000';
         ctx.fillText(text, 95 - 10 * text.length, 70); // magic numbers
         return ctx;
       });
-    });
   }).then(function (ctx) {
     return ctx.canvas.pngStream();
   });
