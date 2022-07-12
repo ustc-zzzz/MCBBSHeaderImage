@@ -32,7 +32,7 @@ function drawSoftwareHeader () {
   }).then(function (data) {
     var img = new canvas.Image();
     img.src = data;
-    var ctx = new canvas(img.width, img.height).getContext('2d');
+    var ctx = new canvas.Canvas(img.width, img.height).getContext('2d');
     ctx.drawImage(img, 0, 0, img.width, img.height);
     return ctx;
   }).then(function (ctx) {
@@ -62,7 +62,7 @@ function drawDevelopmentHeader () {
   }).then(function (data) {
     var img = new canvas.Image();
     img.src = data;
-    var ctx = new canvas(img.width, img.height).getContext('2d');
+    var ctx = new canvas.Canvas(img.width, img.height).getContext('2d');
     ctx.drawImage(img, 0, 0, img.width, img.height);
     return ctx;
   }).then(function (ctx) {
@@ -91,7 +91,7 @@ function drawQandaHeader () {
   }).then(function (data) {
     var img = new canvas.Image();
     img.src = data;
-    var ctx = new canvas(img.width, img.height).getContext('2d');
+    var ctx = new canvas.Canvas(img.width, img.height).getContext('2d');
     ctx.drawImage(img, 0, 0, img.width, img.height);
     return ctx;
   }).then(function (ctx) {

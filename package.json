@@ -6,7 +6,7 @@
     "start": "node ./index.js"
   },
   "dependencies": {
-    "canvas": "~1.6.7",
+    "canvas": "^2.9.3",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
     "request": "^2.88.0",

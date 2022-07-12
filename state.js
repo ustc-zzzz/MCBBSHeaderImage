@@ -40,12 +40,16 @@ function updateStats () {
       uri: 'https://api.mojang.com/orders/statistics',
       body: {metricKeys: ['item_sold_minecraft', 'prepaid_card_redeemed_minecraft']},
       json: true
+    }).catch(function () {
+      return {};
     }), rp({
       uri: 'https://launchermeta.mojang.com/mc/game/version_manifest.json',
       json: true
     }), rp({
       uri: 'https://status.mojang.com/check',
       json: true
+    }).catch(function () {
+      return [];
     })]).then(function (data) {
       saleStats = data[0];
       var minecraftVersions = data[1].versions;
