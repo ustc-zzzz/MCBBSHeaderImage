@@ -56,6 +56,14 @@ var qandaFileMap = {
 
 var ipRecords = {}, maxVisitsInPeriod = 6, period = 3600000; // milliseconds
 
+function isTheseIPVisitsTooFrequently (list) {
+  for (let ip of list) {
+    if (isThisIPVisitsTooFrequently(ip))
+      return true
+  }
+  return false
+}
+
 function isThisIPVisitsTooFrequently (ip) {
   var visitRecords = ipRecords[ip];
   var now = Date.now();
@@ -74,6 +82,11 @@ function isThisIPVisitsTooFrequently (ip) {
   }
 }
 
+function getUserIP(req) {
+  var forwardedFor = req.get('X-Forwarded-For');
+  return (((forwardedFor === undefined) ? req.ip : forwardedFor) + '').replace(' ','').split(',');
+}
+
 router.get('/development/:name', function (req, res, next) {
   var name = req.params['name'];
   if (name && developmentFileMap[name]) {
@@ -81,7 +94,7 @@ router.get('/development/:name', function (req, res, next) {
     developmentFileMap[name](function () {
       var isValidUA = uaFilter.test(req.get('User-Agent'));
       var isValidReferer = developmentRefererFilter.test(req.get('Referer'));
-      var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
+      var isThisIPNotRestricted = !isTheseIPVisitsTooFrequently(getUserIP(req));
       return isValidUA && isValidReferer && isThisIPNotRestricted;
     }).then(function (stream) {
       stream.pipe(res);
@@ -98,7 +111,7 @@ router.get('/software/:name', function (req, res, next) {
     softwareFileMap[name](function () {
       var isValidUA = uaFilter.test(req.get('User-Agent'));
       var isValidReferer = softwareRefererFilter.test(req.get('Referer'));
-      var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
+      var isThisIPNotRestricted = !isTheseIPVisitsTooFrequently(getUserIP(req));
       return isValidUA && isValidReferer && isThisIPNotRestricted;
     }).then(function (stream) {
       stream.pipe(res);
@@ -115,7 +128,7 @@ router.get('/qanda/:name', function (req, res, next) {
     qandaFileMap[name](function () {
       var isValidUA = uaFilter.test(req.get('User-Agent'));
       var isValidReferer = qandaRefererFilter.test(req.get('Referer'));
-      var isThisIPNotRestricted = !isThisIPVisitsTooFrequently(req.ip + '');
+      var isThisIPNotRestricted = !isTheseIPVisitsTooFrequently(getUserIP(req));
       return isValidUA && isValidReferer && isThisIPNotRestricted;
     }).then(function (stream) {
       stream.pipe(res);
