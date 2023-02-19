@@ -57,11 +57,7 @@ var qandaFileMap = {
 var ipRecords = {}, maxVisitsInPeriod = 6, period = 3600000; // milliseconds
 
 function isTheseIPVisitsTooFrequently (list) {
-  for (let ip of list) {
-    if (isThisIPVisitsTooFrequently(ip))
-      return true
-  }
-  return false
+  return isThisIPVisitsTooFrequently(list.length == 0 ? "" : list[0])
 }
 
 function isThisIPVisitsTooFrequently (ip) {
